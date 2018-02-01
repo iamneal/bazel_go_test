@@ -1,0 +1,105 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+load("@org_pubref_rules_protobuf//go:rules.bzl", "go_proto_library")
+load("@org_pubref_rules_protobuf//protobuf:rules.bzl", "proto_language", "proto_compile")
+
+proto_compile(
+    name = "go_pb",
+    importmap = {
+        "options.proto": "github.com/tcncloud/protoc-gen-persist/persist",
+    },
+    imports = [
+        ".",
+        "external",
+        "external/com_google_protobuf/src",
+        "external/protoc_gen_persist/persist/",
+    ],
+    inputs = [
+        "@com_google_protobuf//:well_known_protos",
+    ],
+    langs = [
+        "@org_pubref_rules_protobuf//go",
+    ],
+    protos = ["user.proto"],
+    verbose = 3,
+    with_grpc = True,
+    deps = [
+        "@protoc_gen_persist//persist:persist_pb_protos",
+    ],
+)
+
+genrule(
+    name = "persist_gen",
+    srcs = [
+        "user.proto",
+        "@protoc_gen_persist//:protoc-gen-persist",
+        "@protoc_gen_persist//persist:persist_pb_protos",
+        "@protoc_gen_persist//persist:protos",
+    ],
+    outs = [
+        "persist_lib/user_queries.persist.go",
+        "persist_lib/user_query_handlers.persist.go",
+        "persist_lib/pkg_level_definitions.persist.go",
+    ],
+    cmd = "export VAR=$(location @protoc_gen_persist//persist:protos) && " +
+          "export DIR=$${VAR%/*} && " +
+          "protoc -I. -I$$(dirname $(location @protoc_gen_persist//persist:protos)) " +
+          "-I$$(dirname $(location @protoc_gen_persist//:protoc-gen-persist)) " +
+          "--plugin=protoc-gen-persist=$(location @protoc_gen_persist//:protoc-gen-persist)" +
+          " --persist_out=persist_root=github.com/iamneal/bazel_go_test/lib" +
+          ":$$(dirname \"$(@D)\")" +
+          " $(location user.proto)",
+)
+
+genrule(
+    name = "persist_gen_pb",
+    srcs = [
+        "user.proto",
+        "@protoc_gen_persist//:protoc-gen-persist",
+        "@protoc_gen_persist//persist:persist_pb_protos",
+        "@protoc_gen_persist//persist:protos",
+    ],
+    outs = [
+        "user.persist.go",
+    ],
+    cmd = "export VAR=$(location @protoc_gen_persist//persist:protos) && " +
+          "export DIR=$${VAR%/*} && " +
+          "protoc -I. -I$$(dirname $(location @protoc_gen_persist//persist:protos)) " +
+          "-I$$(dirname $(location @protoc_gen_persist//:protoc-gen-persist)) " +
+          "--plugin=protoc-gen-persist=$(location @protoc_gen_persist//:protoc-gen-persist)" +
+          " --persist_out=persist_root=bazel_go_test/lib" +
+          ":$$(dirname \"$(@D)\")" +
+          " $(location user.proto)",
+)
+
+go_library(
+    name = "persist_library",
+    srcs = [
+        ":persist_gen",
+    ],
+    importpath = "bazel_go_test/lib/persist_lib",
+    deps = [
+        "@com_google_cloud_go//spanner:go_default_library",
+        "@org_golang_x_net//context:go_default_library",
+    ],
+)
+
+go_library(
+    name = "go_default_library",
+    srcs = [
+        "src.go",
+        ":go_pb",
+        ":persist_gen_pb",
+    ],
+    importpath = "bazel_go_test/lib",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":persist_library",
+        "@com_github_golang_protobuf//proto:go_default_library",
+        "@com_google_cloud_go//spanner:go_default_library",
+        "@org_golang_google_grpc//:go_default_library",
+        "@org_golang_google_grpc//codes:go_default_library",
+        "@org_golang_google_grpc//status:go_default_library",
+        "@org_golang_x_net//context:go_default_library",
+        "@protoc_gen_persist//persist:go_default_library",
+    ],
+)

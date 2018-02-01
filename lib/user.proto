@@ -1,0 +1,18 @@
+syntax="proto3";
+
+import "options.proto";
+
+package lib;
+
+message User {
+	string name = 1;
+	int64 id = 2;
+}
+service U {
+	option(persist.service_type) = SPANNER;
+	rpc GetUserById(User) returns (User) {
+		option(persist.ql) = {
+			query: ["SELECT * FROM users WHERE id = @id"],
+		};
+	};
+}
