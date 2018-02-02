@@ -12,9 +12,9 @@ http_archive(
 
 #TODO: update this to point to pubref/rules_protobuf repo
 git_repository(
- name = "org_pubref_rules_protobuf",
- remote = "https://github.com/jwahlin/rules_protobuf",
- commit = "dd760a5f014e34348a75fccdce89d749c0fa8aed",
+    name = "org_pubref_rules_protobuf",
+    remote = "https://github.com/jwahlin/rules_protobuf",
+    commit = "dd760a5f014e34348a75fccdce89d749c0fa8aed",
 )
 
 load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
@@ -36,9 +36,9 @@ go_register_toolchains()
 go_proto_repositories()
 
 git_repository(
-   name = "protoc_gen_persist",
-   commit = "2abdcc3ff6028b9e1d2ef63f1c1fe0ed172338f5",
-   remote = "https://github.com/tcncloud/protoc-gen-persist",
+    name = "protoc_gen_persist",
+    commit = "2abdcc3ff6028b9e1d2ef63f1c1fe0ed172338f5",
+    remote = "https://github.com/tcncloud/protoc-gen-persist",
 )
 
 go_repository(
