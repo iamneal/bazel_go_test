@@ -1,4 +1,4 @@
-load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library", "go_test", "go_prefix")
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library", "go_test", "go_prefix", "go_path")
 load("@bazel_gazelle//:def.bzl", "gazelle")
 
 gazelle(
@@ -8,6 +8,11 @@ gazelle(
 )
 
 go_prefix("bazel_go_test")
+
+go_path(
+    name = "path",
+    deps = [":go_default_library"],
+)
 
 go_library(
     name = "go_default_library",
