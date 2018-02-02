@@ -10,10 +10,11 @@ http_archive(
     url = "https://github.com/bazelbuild/bazel-gazelle/releases/download/0.8/bazel-gazelle-0.8.tar.gz",
 )
 
+#TODO: update this to point to pubref/rules_protobuf repo
 git_repository(
-    name = "org_pubref_rules_protobuf",
-    commit = "023cd8ddf51d8a52fadcb46883025d9bd190750a",
-    remote = "https://github.com/pubref/rules_protobuf",
+ name = "org_pubref_rules_protobuf",
+ remote = "https://github.com/jwahlin/rules_protobuf",
+ commit = "dd760a5f014e34348a75fccdce89d749c0fa8aed",
 )
 
 load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
@@ -35,9 +36,9 @@ go_register_toolchains()
 go_proto_repositories()
 
 git_repository(
-    name = "protoc_gen_persist",
-    commit = "2abdcc3ff6028b9e1d2ef63f1c1fe0ed172338f5",
-    remote = "https://github.com/tcncloud/protoc-gen-persist",
+   name = "protoc_gen_persist",
+   commit = "2abdcc3ff6028b9e1d2ef63f1c1fe0ed172338f5",
+   remote = "https://github.com/tcncloud/protoc-gen-persist",
 )
 
 go_repository(
@@ -83,21 +84,9 @@ go_repository(
 )
 
 go_repository(
-    name = "org_golang_google_grpc",
-    commit = "1cd234627e6f392ade0527d593eb3fe53e832d4a",
-    importpath = "google.golang.org/grpc",
-)
-
-go_repository(
     name = "org_golang_x_crypto",
     commit = "b3c9a1d25cfbbbab0ff4780b71c4f54e6e92a0de",
     importpath = "golang.org/x/crypto",
-)
-
-go_repository(
-    name = "org_golang_x_net",
-    commit = "ab555f366c4508dbe0802550b1b20c46c5c18aa0",
-    importpath = "golang.org/x/net",
 )
 
 go_repository(
@@ -132,8 +121,8 @@ go_repository(
 
 go_repository(
     name = "org_golang_x_net",
-    importpath = "golang.org/x/net",
     tag = "master",
+    importpath = "golang.org/x/net",
 )
 
 go_repository(
@@ -144,6 +133,6 @@ go_repository(
 
 go_repository(
     name = "com_github_golang_protobuf",
-    importpath = "github.com/golang/protobuf",
     tag = "master",
+    importpath = "github.com/golang/protobuf",
 )

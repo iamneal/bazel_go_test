@@ -2,8 +2,9 @@ package main_test
 
 import (
 	"fmt"
-	main "mybtest"
 	"testing"
+
+	main "github.com/iamneal/bazel_go_test"
 )
 
 func Test_main(t *testing.T) {
