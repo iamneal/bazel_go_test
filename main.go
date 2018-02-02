@@ -1,13 +1,12 @@
 package main
 
 import (
-	"bazel_go_test/lib"
 	"fmt"
+	"net"
 	"path"
 
-	"net"
-
 	"github.com/BurntSushi/toml"
+	"github.com/iamneal/bazel_go_test/lib"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"

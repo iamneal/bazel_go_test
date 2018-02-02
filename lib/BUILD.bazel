@@ -90,7 +90,7 @@ go_library(
         ":go_pb",
         ":persist_gen_pb",
     ],
-    importpath = "bazel_go_test/lib",
+    importpath = "github.com/iamneal/bazel_go_test/lib",
     visibility = ["//visibility:public"],
     deps = [
         ":persist_library",
