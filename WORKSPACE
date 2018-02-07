@@ -1,7 +1,7 @@
-http_archive(
+git_repository(
     name = "io_bazel_rules_go",
-    sha256 = "4d8d6244320dd751590f9100cf39fd7a4b75cd901e1f3ffdfd6f048328883695",
-    url = "https://github.com/bazelbuild/rules_go/releases/download/0.9.0/rules_go-0.9.0.tar.gz",
+    remote = "https://github.com/bazelbuild/rules_go",
+    commit = "c949c4d2235a3988ed3c7ac9beb70f707d29d465",
 )
 
 http_archive(
@@ -10,11 +10,10 @@ http_archive(
     url = "https://github.com/bazelbuild/bazel-gazelle/releases/download/0.8/bazel-gazelle-0.8.tar.gz",
 )
 
-#TODO: update this to point to pubref/rules_protobuf repo
 git_repository(
     name = "org_pubref_rules_protobuf",
-    remote = "https://github.com/jwahlin/rules_protobuf",
-    commit = "dd760a5f014e34348a75fccdce89d749c0fa8aed",
+    commit = "ce2a8f18fe3153251c6127cbd166dd9cfd7c8f5f",
+    remote = "https://github.com/pubref/rules_protobuf",
 )
 
 load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
@@ -28,6 +27,37 @@ load(
     "go_repository",
 )
 load("@org_pubref_rules_protobuf//go:rules.bzl", "go_proto_repositories")
+
+git_repository(
+    name = "io_bazel_rules_docker",
+    remote = "https://github.com/bazelbuild/rules_docker.git",
+    commit = "98f481a180c1ad7561406cfcd91b1bc350e09d33",
+)
+
+load(
+    "@io_bazel_rules_docker//container:container.bzl",
+    "container_pull",
+    container_repositories = "repositories",
+)
+
+# This is NOT needed when going through the language lang_image
+# "repositories" function(s).
+container_repositories()
+
+container_pull(
+  name = "java_base",
+  registry = "gcr.io",
+  repository = "distroless/java",
+  # 'tag' is also supported, but digest is encouraged for reproducibility.
+  digest = "sha256:deadbeef",
+)
+
+load(
+    "@io_bazel_rules_docker//go:image.bzl",
+    _go_image_repos = "repositories",
+)
+
+_go_image_repos()
 
 go_rules_dependencies()
 

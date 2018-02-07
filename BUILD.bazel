@@ -1,4 +1,5 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library", "go_test", "go_prefix", "go_path")
+load("@io_bazel_rules_docker//go:image.bzl", "go_image")
 load("@bazel_gazelle//:def.bzl", "gazelle")
 
 gazelle(
@@ -26,12 +27,20 @@ go_binary(
     data = ["//:Gopkg.lock"],
     importpath = "github.com/iamneal/bazel_go_test",
     visibility = ["//visibility:public"],
+    # pure = "on",
+    # goos = "linux",
+)
+
+go_image(
+    name = "bazel_image",
+    binary = ":bazel_go_test",
+    # pure = "on",
+    # goos = "linux",
 )
 
 go_test(
     name = "go_default_xtest",
     srcs = ["main_test.go"],
     data = ["//:Gopkg.lock"],
-    importpath = "github.com/iamneal/bazel_go_test_test",
     deps = [":go_default_library"],
 )
