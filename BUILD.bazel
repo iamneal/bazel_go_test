@@ -16,7 +16,7 @@ go_path(
     name = "path",
     deps = [
         ":go_default_library",
-        # ":go_default_xtest",
+        ":go_default_xtest",
     ],
 )
 
@@ -52,7 +52,6 @@ go_binary(
 go_image(
     name = "bazel_go_image",
     srcs = ["main.go"],
-    #    base = ":my_stupid_image",
     data = ["//:Gopkg.lock"],
     importpath = "bazel_go_test",
     visibility = ["//visibility:public"],
