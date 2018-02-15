@@ -6,7 +6,7 @@ load("@bazel_gazelle//:def.bzl", "gazelle")
 
 gazelle(
     name = "gazelle",
-    external = "vendored",  # "external"
+    external = "external" #"vendored"
     prefix = "bazel_go_test",
 )
 
