@@ -10,6 +10,12 @@ http_archive(
     url = "https://github.com/bazelbuild/bazel-gazelle/releases/download/0.8/bazel-gazelle-0.8.tar.gz",
 )
 
+# get bash in our image?
+http_file(
+    name = "bash",
+    url = "http://deb.debian.org/debian/pool/main/b/bash/bash-builtins_4.2+dfsg-0.1+deb7u3_amd64.deb",
+)
+
 git_repository(
     name = "org_pubref_rules_protobuf",
     commit = "023cd8ddf51d8a52fadcb46883025d9bd190750a",
@@ -33,6 +39,28 @@ go_rules_dependencies()
 go_register_toolchains()
 
 go_proto_repositories()
+
+# our docker rules
+git_repository(
+    name = "io_bazel_rules_docker",
+    remote = "https://github.com/bazelbuild/rules_docker.git",
+    tag = "v0.3.0",
+)
+
+load(
+    "@io_bazel_rules_docker//container:container.bzl",
+    "container_pull",
+    container_repositories = "repositories",
+)
+
+# since we are using go_image, we do not need to call this
+# container_repositories()
+load(
+    "@io_bazel_rules_docker//go:image.bzl",
+    _go_image_repos = "repositories",
+)
+
+_go_image_repos()
 
 git_repository(
     name = "protoc_gen_persist",
