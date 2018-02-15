@@ -46,11 +46,6 @@ go_binary(
         "@org_golang_x_net//context:go_default_library",
     ],
 )
-#docker_image(
-#    name = "my_stupid_image",
-#    base = "@go_image_base//image",
-#    debs = [":bash"],
-#)
 
 # can run with: bazel run //:bazel_go_image
 # if you just want to load into local repository: bazel run //:bazel_go_image -- --norun
